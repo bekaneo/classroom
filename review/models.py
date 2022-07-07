@@ -6,16 +6,14 @@ from product.models import Product
 User = get_user_model()
 
 
-# 5. В приложении review создать модель Review с полями author(FK)
-# использовать встроенную модель пользователя, product(FK),
-# text(Text), rating(integer от 1 до 5).
-
 class Review(models.Model):
 
     author = models.ForeignKey(User,
-                               on_delete=models.CASCADE, verbose_name='User')
+                               on_delete=models.CASCADE,
+                               verbose_name='User', related_name='review')
     product = models.ForeignKey(Product,
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                verbose_name='Product', related_name='review')
 
     text = models.TextField()
     rating_choices = [
