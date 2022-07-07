@@ -11,14 +11,26 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['review'] = ReviewSerializer(
+        reviews = ReviewSerializer(
             instance.review.all(),
             many=True).data
+        # print(reviews)
+        # print(type(reviews))
+        k = 0
+        for i in reviews:
+            k += dict(i)['rating']
+        res = round(k/len(reviews), 2)
+        representation['rating'] = {'средняя оценка': res,
+                                    'количесво оценок': len(reviews)}
 
         return representation
+
+
+class AvgReviewSerializer(serializers.ModelSerializer):
+    pass
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['author', 'text', 'rating']
+        fields = ['rating']
